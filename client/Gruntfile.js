@@ -7,6 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 var os = require('os'); os.tmpDir = os.tmpdir;
+var serveStatic = require('serve-static');
 
 module.exports = function (grunt) {
 
@@ -77,12 +78,12 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
+              serveStatic ('.tmp'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                serveStatic ('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic (appConfig.app)
             ];
           }
         }
@@ -92,13 +93,13 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
-              connect.static('test'),
+              serveStatic ('.tmp'),
+              serveStatic ('test'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                serveStatic ('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic (appConfig.app)
             ];
           }
         }
