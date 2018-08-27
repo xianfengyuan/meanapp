@@ -68,7 +68,6 @@ angular
   })
   .filter('trusted', function ($sce) {
     return function(url) {
-      var videoId = url.split('v=')[1].split('&')[0];
-      return $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + videoId);
+      return $sce.trustAsResourceUrl(url);
     };
   });
