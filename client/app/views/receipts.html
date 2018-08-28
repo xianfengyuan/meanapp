@@ -1,0 +1,24 @@
+<a class="btn btn-primary" href="/#/create/receipt"><span class="glyphicon glyphicon-plus"></span> Create Receipt</a>
+<br/>
+<table class="table table-striped">
+  <thead>
+    <th>description</th>
+    <th>orderDate</th>
+    <th>payment</th>
+    <th>paymentType</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="receipt in receipts">
+      <td><a ng-href="/#/receipt/{{ receipt._id }}">{{ receipt.description }}</a></td>
+      <td>{{ receipt.orderDate }}</td>
+      <td>{{ receipt.payment }}</td>
+      <td>{{ receipt.paymentType }}</td>
+      <td>
+        <div class="button-group">
+          <a ng-href="/#/receipt/{{ receipt._id }}/edit" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></a>
+          <a ng-href="/#/receipt/{{ receipt._id }}/delete" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span></a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

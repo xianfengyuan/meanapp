@@ -1,0 +1,19 @@
+<form role="form">
+  <div class="form-group">
+    <label for="description" class="control-label">Description</label>
+    <input type="text" ng-model="receipt.description" class="form-control" id="description" placeholder="Enter the receipt description"/>
+  </div>
+  <div class="form-group">
+    <label for="orderDate" class="control-label">Order Date</label>
+    <input type="text" ng-model="receipt.orderDate" class="form-control" id="orderDate" placeholder="Enter the date you placed order"/>
+  </div>
+  <div class="form-group">
+    <label for="payment" class="control-label">Payment Amount in Dollars</label>
+    <input type="text" ng-model="receipt.payment" class="form-control" id="payment" placeholder="Enter the amount you paid for the order"/>
+  </div>
+  <div class="form-group">
+    <label for="paymentType" class="control-label">Payment Type (credit/cash)</label>
+    <input type="text" ng-model="receipt.paymentType" class="form-control" id="paymentType" placeholder="Enter the payment type"/>
+  </div>
+  <input type="submit" class="btn btn-primary" ng-click="saveReceipt()" value="Save"/>
+</form>
