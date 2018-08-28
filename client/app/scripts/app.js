@@ -43,6 +43,26 @@ angular
         templateUrl: 'views/movie-delete.html',
         controller: 'MovieDeleteCtrl'
       })
+      .when('/receipts', {
+        templateUrl: 'views/receipts.html',
+        controller: 'ReceiptsCtrl'
+      })
+      .when('/create/receipt', {
+        templateUrl: 'views/receipt-add.html',
+        controller: 'ReceiptAddCtrl'
+      })
+      .when('/receipt/:id', {
+        templateUrl: 'views/receipt-view.html',
+        controller: 'ReceiptViewCtrl'
+      })
+      .when('/receipt/:id/edit', {
+        templateUrl: 'views/receipt-edit.html',
+        controller: 'ReceiptEditCtrl'
+      })
+      .when('/receipt/:id/delete', {
+        templateUrl: 'views/receipt-delete.html',
+        controller: 'ReceiptDeleteCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
@@ -56,6 +76,16 @@ angular
   })
   .factory('Movie', function(MovieRestangular) {
     return MovieRestangular.service('movie');
+  })
+  .factory('ReceiptRestangular', function(Restangular) {
+    return Restangular.withConfig(function(RestangularConfigurer) {
+      RestangularConfigurer.setRestangularFields({
+        id: '_id'
+      });
+    });
+  })
+  .factory('Receipt', function(ReceiptRestangular) {
+    return ReceiptRestangular.service('receipt');
   })
   .directive('youtube', function() {
     return {
