@@ -14,5 +14,5 @@ angular.module('clientApp')
   Receipt
 ) {
   $scope.viewReceipt = true;
-  $scope.receipt = Receipt.one($routeParams.id).get().$object;
+  $scope.receipt = Receipt.list().one($routeParams.id).get().$object;
 });

@@ -85,7 +85,14 @@ angular
     });
   })
   .factory('Receipt', function(ReceiptRestangular) {
-    return ReceiptRestangular.service('receipt');
+    return {
+      list: function() {
+        return ReceiptRestangular.service('receipt');
+      },
+      search: function(query){
+        return ReceiptRestangular.service('receipt?description__regex=/'+query+'/');
+      }
+    };
   })
   .directive('youtube', function() {
     return {
@@ -100,4 +107,18 @@ angular
     return function(url) {
       return $sce.trustAsResourceUrl(url);
     };
+  })
+  .filter('utcToLocal', function($filter) {
+    return function(utcDateString, format) {
+      if (!utcDateString) {
+        return;
+      }
+      // append 'Z' to the date string to indicate UTC time if the timezone isn't already specified
+      if (utcDateString.indexOf('Z') === -1 && utcDateString.indexOf('+') === -1) {
+        utcDateString += 'Z';
+      }
+      // convert and format date using the built in angularjs date filter
+      return $filter('date')(utcDateString, format);
+    };
   });
+  

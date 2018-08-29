@@ -15,7 +15,7 @@ angular.module('clientApp')
 ) {
   $scope.receipt = {};
   $scope.saveReceipt = function() {
-    Receipt.post($scope.receipt).then(function() {
+    Receipt.list().post($scope.receipt).then(function() {
       $location.path('/receipts');
     });
   };

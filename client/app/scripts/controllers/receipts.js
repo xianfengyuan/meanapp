@@ -12,5 +12,5 @@ angular.module('clientApp')
     $scope,
     Receipt
   ) {
-    $scope.receipts = Receipt.getList().$object;
+    $scope.receipts = Receipt.list().getList().$object;
   });

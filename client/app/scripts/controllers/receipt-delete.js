@@ -14,7 +14,7 @@ angular.module('clientApp')
   Receipt,
   $location
 ) {
-  $scope.receipt = Receipt.one($routeParams.id).get().$object;
+  $scope.receipt = Receipt.list().one($routeParams.id).get().$object;
   $scope.deleteReceipt = function() {
     $scope.receipt.remove().then(function() {
       $location.path('/receipts');

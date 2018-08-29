@@ -16,7 +16,7 @@ angular.module('clientApp')
 ) {
   $scope.editReceipt = true;
   $scope.receipt = {};
-  Receipt.one($routeParams.id).get().then(function(receipt) {
+  Receipt.list().one($routeParams.id).get().then(function(receipt) {
     $scope.receipt = receipt;
     $scope.saveReceipt = function() {
       $scope.receipt.save().then(function() {
