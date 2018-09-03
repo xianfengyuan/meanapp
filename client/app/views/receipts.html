@@ -15,7 +15,7 @@
     <th>Operations</th>
   </thead>
   <tbody>
-    <tr ng-repeat="receipt in receipts | orderBy : order : reverse | filter: { description: searchFilter }">
+    <tr ng-repeat="receipt in receipts | orderBy : order : reverse | filter: searchFilter">
       <td><a ng-href="/#/receipt/{{ receipt._id }}">{{ receipt.description }}</a></td>
       <td>{{ receipt.orderDate  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td>
       <td>{{ receipt.payment }}</td>
