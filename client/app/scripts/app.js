@@ -11,7 +11,8 @@
 angular
   .module('clientApp', [
     'ngRoute',
-    'restangular'
+    'restangular',
+    'angularUtils.directives.dirPagination'
   ])
   .config(function ($routeProvider, RestangularProvider) {
 
@@ -89,8 +90,14 @@ angular
       list: function() {
         return ReceiptRestangular.service('receipt');
       },
-      search: function(query){
+      search: function(query) {
         return ReceiptRestangular.service('receipt?description__regex=/'+query+'/');
+      },
+      page: function(pageno) {
+        return ReceiptRestangular.service('receipt?limit=5&skip='+(pageno-1)*5);
+      },
+      count: function() {
+        return ReceiptRestangular.service('receipt/virtual/total-count');
       }
     };
   })
@@ -121,4 +128,3 @@ angular
       return $filter('date')(utcDateString, format);
     };
   });
-  

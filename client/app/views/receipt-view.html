@@ -3,7 +3,7 @@
   <tbody>
     <tr><td>description: </td><td>{{ receipt.description }}</td></tr>
     <tr><td>orderDate: </td><td>{{ receipt.orderDate  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td></tr>
-    <tr><td>payment</td><td>{{ receipt.payment }}</td></tr>
+    <tr><td>payment</td><td>${{ receipt.payment }}</td></tr>
     <tr><td>paymentType</td><td>{{ receipt.paymentType }}</td></tr>
   </tbody>
 </table>

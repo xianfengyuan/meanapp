@@ -2,7 +2,12 @@ var Resource = require('resourcejs');
 module.exports = function(app, route) {
 
   // Setup the controller for REST;
-  Resource(app, '', route, app.models.receipt).rest();
+  Resource(app, '', route, app.models.receipt).rest({
+    before: function(req, res, next) {
+      req.query.limit = 999999;
+      next();
+    }
+  });
 
   Resource(app, '', route, app.models.receipt).virtual({
     path: 'max-payment',

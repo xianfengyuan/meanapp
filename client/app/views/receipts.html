@@ -1,12 +1,12 @@
-<table class="table table-striped">
-  <tr>
-    <td>
-      <a class="btn btn-primary" href="/#/create/receipt"><span class="glyphicon glyphicon-plus"></span> Create Receipt</a>
-    </td>
-    <td><form>
-      <div class="form-group searchbox"><input type="text" class="form-control" ng-model="searchFilter" placeholder="Search receipts"></div>
-    </form></td>
-</table>
+<a class="btn btn-primary" href="/#/create/receipt"><span class="glyphicon glyphicon-plus"></span> Create Receipt</a>
+<form>
+  <div class="form-group searchbox"><input type="text" class="form-control" ng-model="searchFilter" placeholder="Search receipts"></div>
+</form>
+<dir-pagination-controls
+  max-size="5"
+  direction-links="true"
+  boundary-links="true">
+</dir-pagination-controls>
 <table class="table table-striped">
   <thead>
     <th>description</th>
@@ -15,10 +15,10 @@
     <th>Operations</th>
   </thead>
   <tbody>
-    <tr ng-repeat="receipt in receipts | orderBy : order : reverse | filter: searchFilter">
+    <tr dir-paginate="receipt in receipts | itemsPerPage: 10 | orderBy : order : reverse | filter: searchFilter">
       <td><a ng-href="/#/receipt/{{ receipt._id }}">{{ receipt.description }}</a></td>
       <td>{{ receipt.orderDate  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td>
-      <td>{{ receipt.payment }}</td>
+      <td>${{ receipt.payment }}</td>
       <td>
         <div class="button-group">
           <a ng-href="/#/receipt/{{ receipt._id }}/edit" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></a>
