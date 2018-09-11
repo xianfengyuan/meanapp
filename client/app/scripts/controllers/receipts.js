@@ -13,4 +13,8 @@ angular.module('clientApp')
     Receipt
   ) {
     $scope.receipts = Receipt.list().getList().$object;
+    $scope.sort = function(key) {
+      $scope.sortKey = key;
+      $scope.reverse = !$scope.reverse;
+    }
   });

@@ -9,13 +9,19 @@
 </dir-pagination-controls>
 <table class="table table-striped">
   <thead>
-    <th>description</th>
-    <th>orderDate</th>
-    <th>payment</th>
+    <th ng-click="sort('description')">description
+      <span class="glyphicon sort-icon" ng-show="sortKey==='description'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th ng-click="sort('orderDate')">orderDate
+      <span class="glyphicon sort-icon" ng-show="sortKey==='orderDate'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th ng-click="sort('payment')">payment
+      <span class="glyphicon sort-icon" ng-show="sortKey==='payment'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
     <th>Operations</th>
   </thead>
   <tbody>
-    <tr dir-paginate="receipt in receipts | itemsPerPage: 10 | orderBy : order : reverse | filter: searchFilter">
+    <tr dir-paginate="receipt in receipts | itemsPerPage: 10 | orderBy : sortKey : reverse | filter: searchFilter">
       <td><a ng-href="/#/receipt/{{ receipt._id }}">{{ receipt.description }}</a></td>
       <td>{{ receipt.orderDate  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td>
       <td>${{ receipt.payment }}</td>
