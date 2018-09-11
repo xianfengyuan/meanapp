@@ -11,7 +11,7 @@ var ReceiptSchema = new mongoose.Schema({
     required: true
   },
   payment: {
-    type: String,
+    type: Number,
     required: true
   },
   paymentType: {
