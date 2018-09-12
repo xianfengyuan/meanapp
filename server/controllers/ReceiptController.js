@@ -2,12 +2,12 @@ var Resource = require('resourcejs');
 module.exports = function(app, route) {
 
   // Setup the controller for REST;
-  Resource(app, '', route, app.models.receipt).rest({
+  Resource(app, '', route, app.models.receipt).rest(/*{
     before: function(req, res, next) {
       req.query.limit = 999999;
       next();
     }
-  });
+  }*/);
 
   Resource(app, '', route, app.models.receipt).virtual({
     path: 'max-payment',
@@ -18,13 +18,23 @@ module.exports = function(app, route) {
           $max: '$payment'
         }
       });
-      return next();
+      next();
     }
   }).virtual({
     path: 'total-count',
     before: function(req, res, next) {
       req.modelQuery = app.models.receipt.count();
-      return next();
+      next();
+    },
+    after: function(req, res, next) {
+      var count = res.resource.item;
+      res.resource.item = [
+        {
+          _id: null,
+          total: count
+        }
+      ];
+      next();
     }
   });
 

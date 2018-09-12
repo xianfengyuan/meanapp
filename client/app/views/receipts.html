@@ -5,7 +5,8 @@
 <dir-pagination-controls
   max-size="5"
   direction-links="true"
-  boundary-links="true">
+  boundary-links="true"
+  on-page-change="pageChanged(newPageNumber)">
 </dir-pagination-controls>
 <table class="table table-striped">
   <thead>
@@ -21,7 +22,8 @@
     <th>Operations</th>
   </thead>
   <tbody>
-    <tr dir-paginate="receipt in receipts | itemsPerPage: 10 | orderBy : sortKey : reverse | filter: searchFilter">
+    <tr ng-show="totalReceipts <= 0"><td colspan="5" style="text-align:center;">Loading new data!!</td></tr>
+    <tr dir-paginate="receipt in receipts | itemsPerPage: receiptsPerPage | orderBy : sortKey : reverse | filter: searchFilter"  total-items="totalReceipts" current-page="pagination.current">
       <td><a ng-href="/#/receipt/{{ receipt._id }}">{{ receipt.description }}</a></td>
       <td>{{ receipt.orderDate  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td>
       <td>${{ receipt.payment }}</td>

@@ -94,7 +94,7 @@ angular
         return ReceiptRestangular.service('receipt?description__regex=/'+query+'/');
       },
       page: function(pageno) {
-        return ReceiptRestangular.service('receipt?limit=5&skip='+(pageno-1)*5);
+        return ReceiptRestangular.service('receipt?limit=10&skip='+(pageno-1)*10);
       },
       count: function() {
         return ReceiptRestangular.service('receipt/virtual/total-count');
