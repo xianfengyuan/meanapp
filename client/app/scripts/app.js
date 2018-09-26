@@ -12,7 +12,8 @@ angular
   .module('clientApp', [
     'ngRoute',
     'restangular',
-    'angularUtils.directives.dirPagination'
+    'angularUtils.directives.dirPagination',
+    'moment-picker'
   ])
   .config(function ($routeProvider, RestangularProvider) {
 

@@ -8,7 +8,8 @@
     "angular-route": "1.5.8",
     "restangular": "^1.4.0",
     "bootstrap-sass": "^3.3.7",
-    "angularUtils-pagination": "angular-utils-pagination#^0.11.1"
+    "angularUtils-pagination": "angular-utils-pagination#^0.11.1",
+    "angular-moment-picker": "moment-picker#^0.10.2"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8",
