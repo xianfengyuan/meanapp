@@ -15,6 +15,11 @@ angular
     'angularUtils.directives.dirPagination',
     'moment-picker'
   ])
+  .config(function (momentPickerProvider) {
+    momentPickerProvider.options({
+      minutesStep: 1
+    });
+  })
   .config(function ($routeProvider, RestangularProvider) {
 
     // Set the base URL for Restangular.
