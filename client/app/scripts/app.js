@@ -13,15 +13,45 @@ angular
     'ngRoute',
     'restangular',
     'angularUtils.directives.dirPagination',
-    'moment-picker'
+    'moment-picker',
+    'ngNotify',
+    'satellizer'
   ])
+  .config(['$authProvider', 'config', function ($authProvider, config) {
+    $authProvider.github({
+      clientId: config.GITHUB_CLIENT_ID,
+      redirectUri: config.GITHUB_REDIRECT_URI,
+      url: config.GITHUB_ACCESS_TOKEN_REQUEST_URL
+    });
+    $authProvider.httpInterceptor = true;
+  }])
   .config(function (momentPickerProvider) {
     momentPickerProvider.options({
       minutesStep: 1
     });
   })
-  .config(function ($routeProvider, RestangularProvider) {
+  .config(function ($stateProvider, $authProvider) {
+    // Redirect to the login page if not authenticated
+    var requireAuthentication = function ($location, $auth, AuthenticationService) {
+      if ($auth.isAuthenticated()) {
+        return AuthenticationService.login()
+      } else {
+        return $location.path('/login');
+      }
+    };
 
+    $stateProvider
+    .state('login', {
+      url: "/login",
+      templateUrl: 'views/login.html'
+    })
+    .state('logout', {
+      url: '/logout',
+      template: null,
+      controller: 'LogoutCtrl'
+    })
+  })
+  .config(function ($routeProvider, RestangularProvider) {
     // Set the base URL for Restangular.
     RestangularProvider.setBaseUrl('http://localhost:3000');
 
@@ -71,7 +101,8 @@ angular
         controller: 'ReceiptDeleteCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        // For any unmatched url, redirect to /login
+        redirectTo: '/login'
       });
   })
   .factory('MovieRestangular', function(Restangular) {
@@ -114,6 +145,13 @@ angular
         src: '='
       },
       templateUrl: 'views/youtube.html'
+    };
+  })
+  .directive('signInButton', function() {
+    return {
+      restrict: "E",
+      templateUrl: 'views/sign-in-button.html',
+      controller: 'SignInButtonCtrl'
     };
   })
   .filter('trusted', function ($sce) {

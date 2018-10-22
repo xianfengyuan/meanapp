@@ -23,8 +23,21 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  grunt.loadNpmTasks('grunt-ng-constant');
+
   // Define the configuration for all the tasks
   grunt.initConfig({
+    ngconstant: {
+      options: {
+        dest: '<%= yeoman.app %>/scripts/constants.config.js',
+        name: 'clientApp',
+        deps: false,
+        constants: {
+          config: grunt.file.readJSON('config.json')
+        }
+      },
+      build: {}
+    },
 
     // Project settings
     yeoman: appConfig,
@@ -400,6 +413,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer',
+      'ngconstant:build',
       'connect:livereload',
       'watch'
     ]);
@@ -423,6 +437,7 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
+    'ngconstant:build',
     'autoprefixer',
     'concat',
     'ngAnnotate',

@@ -9,6 +9,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-moment-picker/dist/angular-moment-picker.min.css" />
+    <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -68,11 +69,15 @@
     <script src="bower_components/angularUtils-pagination/dirPagination.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
+    <script src="bower_components/satellizer/dist/satellizer.js"></script>
+    <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
+    <script src="bower_components/particles.js/particles.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/constants.config.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/movies.js"></script>
         <script src="scripts/controllers/receipts.js"></script>
@@ -84,6 +89,7 @@
         <script src="scripts/controllers/receipt-view.js"></script>
         <script src="scripts/controllers/receipt-edit.js"></script>
         <script src="scripts/controllers/receipt-delete.js"></script>
+        <script src="scripts/controllers/sign-in-button.js"></script>
         <!-- endbuild -->
 </body>
 </html>
