@@ -30,8 +30,7 @@ angular
       minutesStep: 1
     });
   })
-  .config(function ($stateProvider, $authProvider) {
-    // Redirect to the login page if not authenticated
+  .config(function ($routeProvider, $authProvider, RestangularProvider) {
     var requireAuthentication = function ($location, $auth, AuthenticationService) {
       if ($auth.isAuthenticated()) {
         return AuthenticationService.login()
@@ -39,26 +38,19 @@ angular
         return $location.path('/login');
       }
     };
-
-    $stateProvider
-    .state('login', {
-      url: "/login",
-      templateUrl: 'views/login.html'
-    })
-    .state('logout', {
-      url: '/logout',
-      template: null,
-      controller: 'LogoutCtrl'
-    })
-  })
-  .config(function ($routeProvider, RestangularProvider) {
     // Set the base URL for Restangular.
     RestangularProvider.setBaseUrl('http://localhost:3000');
 
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
+        resolve: {
+          requireAuthentication: requireAuthentication
+        },
         controller: 'MainCtrl'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html'
       })
       .when('/movies', {
         templateUrl: 'views/movies.html',
