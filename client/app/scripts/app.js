@@ -17,6 +17,13 @@ angular
     'ngNotify',
     'satellizer'
   ])
+  .run(['ngNotify', function(ngNotify) {
+    ngNotify.config({
+      theme: 'paster',
+      position: 'top',
+      duration: 250
+    });
+  }])
   .config(['$authProvider', 'config', function ($authProvider, config) {
     $authProvider.github({
       clientId: config.GITHUB_CLIENT_ID,
@@ -38,6 +45,7 @@ angular
         return $location.path('/login');
       }
     };
+
     // Set the base URL for Restangular.
     RestangularProvider.setBaseUrl('http://localhost:3000');
 
@@ -45,6 +53,7 @@ angular
       .when('/', {
         templateUrl: 'views/main.html',
         resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
           requireAuthentication: requireAuthentication
         },
         controller: 'MainCtrl'
@@ -52,44 +61,103 @@ angular
       .when('/login', {
         templateUrl: 'views/login.html'
       })
+      .when('/logout', {
+        templateUrl: null,
+        controller: function(AuthenticationService, $location, ngNotify, $window, $state, $auth){
+          if(!$auth.isAuthenticated()){
+            $location.path('/login');
+          }
+          else{
+            AuthenticationService.logout().catch(function(error) {
+              // The logging out process failed on the server side
+              if(error.status == 500){
+                ngNotify.set('Logout failed.', { type: 'error' });
+              }
+            }).finally(function(){
+              $location.path('/login');
+              $window.location.reload()
+            });
+          }
+        }
+      })
       .when('/movies', {
         templateUrl: 'views/movies.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'MoviesCtrl'
       })
       .when('/create/movie', {
         templateUrl: 'views/movie-add.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'MovieAddCtrl'
       })
       .when('/movie/:id', {
         templateUrl: 'views/movie-view.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'MovieViewCtrl'
       })
       .when('/movie/:id/edit', {
         templateUrl: 'views/movie-edit.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'MovieEditCtrl'
       })
       .when('/movie/:id/delete', {
         templateUrl: 'views/movie-delete.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'MovieDeleteCtrl'
       })
       .when('/receipts', {
         templateUrl: 'views/receipts.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'ReceiptsCtrl'
       })
       .when('/create/receipt', {
         templateUrl: 'views/receipt-add.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'ReceiptAddCtrl'
       })
       .when('/receipt/:id', {
         templateUrl: 'views/receipt-view.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'ReceiptViewCtrl'
       })
       .when('/receipt/:id/edit', {
         templateUrl: 'views/receipt-edit.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'ReceiptEditCtrl'
       })
       .when('/receipt/:id/delete', {
         templateUrl: 'views/receipt-delete.html',
+        resolve: {
+          currentUser: function(currentUser){ return currentUser.fetch() },
+          requireAuthentication: requireAuthentication
+        },
         controller: 'ReceiptDeleteCtrl'
       })
       .otherwise({
