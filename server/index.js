@@ -125,9 +125,13 @@ app.post('/logout', ensureAuthenticated, function(req, res) {
 
   // Revoke access to the token
   request.delete({ url: resetTokenUrl, headers: headers }, function(err, response, payload) {
-    if (!err && response.statusCode == 200){
-      db.users.update({ oauth_token: req.user.oauth_token }, { $set: { oauth_token: null } });
-      res.status(200).send();
+    if (!err && response.statusCode >= 200 && response.statusCode < 300){
+      db.users.remove({ oauth_token: req.user.oauth_token  }, function (err, numDeleted) {
+        if(err){
+          return res.status(400).send({ message: 'Deletion failed' });
+        }
+        res.status(200).send({ message: 'Deleted' + numDeleted + 'user(s)' });
+      });
     }
     else{
       res.status(500).send();

@@ -62,23 +62,7 @@ angular
         templateUrl: 'views/login.html'
       })
       .when('/logout', {
-        templateUrl: null,
-        controller: function(AuthenticationService, $location, ngNotify, $window, $state, $auth){
-          if(!$auth.isAuthenticated()){
-            $location.path('/login');
-          }
-          else{
-            AuthenticationService.logout().catch(function(error) {
-              // The logging out process failed on the server side
-              if(error.status == 500){
-                ngNotify.set('Logout failed.', { type: 'error' });
-              }
-            }).finally(function(){
-              $location.path('/login');
-              $window.location.reload()
-            });
-          }
-        }
+        templateUrl: 'views/logout.html'
       })
       .when('/movies', {
         templateUrl: 'views/movies.html',
@@ -212,6 +196,13 @@ angular
       restrict: "E",
       templateUrl: 'views/sign-in-button.html',
       controller: 'SignInButtonCtrl'
+    };
+  })
+  .directive('signOutButton', function() {
+    return {
+      restrict: "E",
+      templateUrl: 'views/sign-out-button.html',
+      controller: 'SignOutButtonCtrl'
     };
   })
   .filter('trusted', function ($sce) {
