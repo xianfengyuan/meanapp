@@ -5,3 +5,4 @@ bower_components
 .env
 db
 config.json
+constants.config.js
