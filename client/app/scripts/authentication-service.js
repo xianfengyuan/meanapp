@@ -14,7 +14,7 @@ angular.module('clientApp')
       };
 
       var serverSignout = function(){
-        var url = config.SERVER_URL + 'logout'
+        var url = config.SERVER_URL + '/logout'
 		    return $http({ method: 'POST', url: url })
       };
 

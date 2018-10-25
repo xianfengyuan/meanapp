@@ -54,7 +54,7 @@ angular
       return $routeProvider.when(path, route);
     };
     // Set the base URL for Restangular.
-    RestangularProvider.setBaseUrl('http://localhost:3000');
+    RestangularProvider.setBaseUrl(config.SERVER_URL);
 
     $routeProvider
       .when('/login', {

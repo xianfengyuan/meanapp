@@ -112,9 +112,9 @@ app.post('/auth/github', function(req, res) {
          if (err || !err && response.statusCode > 200 && response.statusCode < 300) {
            return revokeToken(access_token, function(err, response, body) {
              if (err) {
-               return res.status(400).send({ message: 'revoke user failed' });
+               return res.status(400).send({ message: 'check user: revoke user failed' });
              }
-             return res.status(400).send({ message: 'User not found in local DB' });
+             return res.status(400).send({ message: 'check user: user not found in local DB' });
            });
          }
 
