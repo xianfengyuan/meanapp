@@ -52,6 +52,28 @@ function ensureAuthenticated(req, res, next) {
   });
 }
 
+// next(err, res, body)
+function revokeToken(token, next) {
+  // Revoke access to the Access token
+  // https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization
+  // POST /applications/:client_id/tokens/:access_token
+  var resetTokenUrl = "https://api.github.com/applications/"+process.env.GITHUB_CLIENT_ID+'/tokens/'+ token;
+  var authorization = new Buffer(process.env.GITHUB_CLIENT_ID + ":" + process.env.GITHUB_CLIENT_SECRET).toString("base64");
+
+  var headers = {
+    "Authorization": "Basic "+authorization,
+    'User-Agent': 'NodeJS'
+  }
+
+  // Revoke access to the token
+  request.delete({ url: resetTokenUrl, headers: headers }, function(err, res, body) {
+    if (err) {
+      return next(err);
+    }
+    next(null, res, body);
+  });
+}
+
 /*
  |--------------------------------------------------------------------------
  | Login with GitHub
@@ -79,29 +101,40 @@ app.post('/auth/github', function(req, res) {
      github_client.me().info(function(err, profile){
 
        if(err){
-         return res.status(400).send({ message: 'User not found' });
+         return res.status(400).send({ message: 'User not found in github' });
        }
 
        var github_id = profile['id'];
-       var user = { _id: github_id, oauth_token: access_token }
-
-       db.users.find({ _id: github_id  }, function (err, docs) {
-
-
-         // The user doesn't have an account already
-         if(_.isEmpty(docs)){
-           // Create the user
-           db.users.insert(user);
+       var github_login = profile['login'];
+       var userUrl = 'http://localhost:' + process.env.LISTEN_PORT + '/user?id__regex=/^' + github_login + '/i';
+       request(userUrl, { json: true }, function(err, response, body) {
+         console.log('check local DB: ' + JSON.stringify(body));
+         if (err || !err && response.statusCode > 200 && response.statusCode < 300) {
+           return revokeToken(access_token, function(err, response, body) {
+             if (err) {
+               return res.status(400).send({ message: 'revoke user failed' });
+             }
+             return res.status(400).send({ message: 'User not found in local DB' });
+           });
          }
-         // Update the oauth2 token
-         else{
-           db.users.update({ _id: github_id }, { $set: { oauth_token: access_token } } )
-         }
-       });
 
-       res.send({token: access_token});
-    });
-  });
+         // found user in local DB
+         var user = { _id: github_id, oauth_token: access_token }
+         db.users.find({ _id: github_id  }, function (err, docs) {
+           // The user doesn't have an account already
+           if(_.isEmpty(docs)){
+             // Create the user
+             db.users.insert(user);
+           }
+           // Update the oauth2 token
+           else{
+             db.users.update({ _id: github_id }, { $set: { oauth_token: access_token } } )
+           }
+         });
+         res.send({token: access_token});
+      }); //request check if user is legit
+    }); //github auth
+  }); // get auth token
 });
 
 /*
@@ -112,19 +145,7 @@ app.post('/auth/github', function(req, res) {
 
 app.post('/logout', ensureAuthenticated, function(req, res) {
 
-  // Revoke access to the Access token
-  // https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization
-  // POST /applications/:client_id/tokens/:access_token
-  var resetTokenUrl = "https://api.github.com/applications/"+process.env.GITHUB_CLIENT_ID+'/tokens/'+ req.user.oauth_token;
-  var authorization = new Buffer(process.env.GITHUB_CLIENT_ID + ":" + process.env.GITHUB_CLIENT_SECRET).toString("base64");
-
-  var headers = {
-    "Authorization": "Basic "+authorization,
-    'User-Agent': 'NodeJS'
-  }
-
-  // Revoke access to the token
-  request.delete({ url: resetTokenUrl, headers: headers }, function(err, response, payload) {
+  revokeToken(req.user.oauth_token, function(err, response, payload) {
     if (!err && response.statusCode >= 200 && response.statusCode < 300){
       db.users.remove({ oauth_token: req.user.oauth_token  }, function (err, numDeleted) {
         if(err){
