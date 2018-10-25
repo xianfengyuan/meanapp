@@ -37,7 +37,7 @@ angular
       minutesStep: 1
     });
   })
-  .config(function ($routeProvider, $authProvider, RestangularProvider) {
+  .config(function ($routeProvider, $authProvider, config, RestangularProvider) {
     var requireAuthentication = function ($location, $auth, AuthenticationService) {
       if ($auth.isAuthenticated()) {
         return AuthenticationService.login()

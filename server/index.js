@@ -93,6 +93,13 @@ app.post('/auth/github', function(req, res) {
 
     // Exchange authorization code for access token.
   request.post({ url: accessTokenUrl, qs: params }, function(err, response, token) {
+    console.log('====================');
+    console.log(response);
+    console.log('====================');
+    console.log(token);
+    if(err){
+      return res.status(400).send({ message: 'post error, User not found in github: ' + JSON.stringify(err) + accessTokenUrl + JSON.stringify(params) });
+    }
 
      var access_token = qs.parse(token).access_token;
      var github_client = github.client(access_token);
@@ -101,7 +108,7 @@ app.post('/auth/github', function(req, res) {
      github_client.me().info(function(err, profile){
 
        if(err){
-         return res.status(400).send({ message: 'User not found in github' });
+         return res.status(400).send(token);
        }
 
        var github_id = profile['id'];
@@ -112,9 +119,9 @@ app.post('/auth/github', function(req, res) {
          if (err || !err && response.statusCode > 200 && response.statusCode < 300) {
            return revokeToken(access_token, function(err, response, body) {
              if (err) {
-               return res.status(400).send({ message: 'check user: revoke user failed' });
+               return res.status(400).send({ message: 'check user: revoke user failed: ' + JSON.stringify(access_token) });
              }
-             return res.status(400).send({ message: 'check user: user not found in local DB' });
+             return res.status(400).send({ message: 'check user: user not found in local DB: ' + JSON.stringify(access_token) });
            });
          }
 
