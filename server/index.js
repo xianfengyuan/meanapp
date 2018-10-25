@@ -92,11 +92,9 @@ app.post('/auth/github', function(req, res) {
   };
 
     // Exchange authorization code for access token.
-  request.post({ url: accessTokenUrl, qs: params }, function(err, response, token) {
-    console.log('====================');
-    console.log(response);
-    console.log('====================');
-    console.log(token);
+  request.post({ url: accessTokenUrl, headers: {'Content-Type': 'application/json'}, qs: params }, function(err, response, token) {
+    // console.log('====================');
+    // console.log(JSON.stringify(params));
     if(err){
       return res.status(400).send({ message: 'post error, User not found in github: ' + JSON.stringify(err) + accessTokenUrl + JSON.stringify(params) });
     }
