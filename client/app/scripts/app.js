@@ -67,6 +67,26 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .accessWhen('/logins', {
+        templateUrl: 'views/logins.html',
+        controller: 'LoginsCtrl'
+      })
+      .accessWhen('/create/login', {
+        templateUrl: 'views/login-add.html',
+        controller: 'LoginAddCtrl'
+      })
+      .accessWhen('/login/:id', {
+        templateUrl: 'views/login-view.html',
+        controller: 'LoginViewCtrl'
+      })
+      .accessWhen('/login/:id/edit', {
+        templateUrl: 'views/login-edit.html',
+        controller: 'LoginEditCtrl'
+      })
+      .accessWhen('/login/:id/delete', {
+        templateUrl: 'views/login-delete.html',
+        controller: 'LoginDeleteCtrl'
+      })
       .accessWhen('/movies', {
         templateUrl: 'views/movies.html',
         controller: 'MoviesCtrl'
@@ -111,6 +131,29 @@ angular
         // For any unmatched url, redirect to /login
         redirectTo: '/login'
       });
+  })
+  .factory('LoginRestangular', function(Restangular) {
+    return Restangular.withConfig(function(RestangularConfigurer) {
+      RestangularConfigurer.setRestangularFields({
+        id: '_id'
+      });
+    });
+  })
+  .factory('Login', function(LoginRestangular) {
+    return {
+      list: function() {
+        return LoginRestangular.service('login');
+      },
+      search: function(query) {
+        return LoginRestangular.service('login?username__regex=/'+query+'/');
+      },
+      page: function(pageno) {
+        return LoginRestangular.service('login?limit=10&skip='+(pageno-1)*10);
+      },
+      count: function() {
+        return LoginRestangular.service('login/virtual/total-count');
+      }
+    };
   })
   .factory('MovieRestangular', function(Restangular) {
     return Restangular.withConfig(function(RestangularConfigurer) {
