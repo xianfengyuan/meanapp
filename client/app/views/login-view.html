@@ -1,0 +1,9 @@
+<ng-include src="'views/login-nav.html'"></ng-include>
+<table class="table table-striped">
+  <tbody>
+    <tr><td>username: </td><td>{{ login.username }}</td></tr>
+    <tr><td>password</td><td>{{ login.password }}</td></tr>
+    <tr><td>established: </td><td>{{ login.established  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td></tr>
+    <tr><td>comments</td><td>{{ login.comments }}</td></tr>
+  </tbody>
+</table>

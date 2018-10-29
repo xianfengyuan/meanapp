@@ -1,0 +1,42 @@
+<a class="btn btn-primary" href="/#/create/login"><span class="glyphicon glyphicon-plus"></span>Create a credential</a>
+<form>
+  <div class="form-group searchbox"><input type="text" class="form-control" ng-model="searchFilter" placeholder="Search credentials"></div>
+</form>
+<dir-pagination-controls
+  max-size="5"
+  direction-links="true"
+  boundary-links="true"
+  on-page-change="pageChanged(newPageNumber)">
+</dir-pagination-controls>
+<table class="table table-striped">
+  <thead>
+    <th ng-click="sort('username')">username
+      <span class="glyphicon sort-icon" ng-show="sortKey==='username'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th ng-click="sort('password')">password
+      <span class="glyphicon sort-icon" ng-show="sortKey==='password'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th ng-click="sort('established')">established
+      <span class="glyphicon sort-icon" ng-show="sortKey==='established'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th ng-click="sort('comments')">comments
+      <span class="glyphicon sort-icon" ng-show="sortKey==='comments'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+    </th>
+    <th>Operations</th>
+  </thead>
+  <tbody>
+    <tr ng-show="totalLogins <= 0"><td colspan="5" style="text-align:center;">Loading new data!!</td></tr>
+    <tr dir-paginate="login in logins | itemsPerPage: loginsPerPage | orderBy : sortKey : reverse | filter: searchFilter"  total-items="totalLogins" current-page="pagination.current">
+      <td><a ng-href="/#/login/{{ login._id }}">{{ login.username }}</a></td>
+      <td>${{ login.password }}</td>
+      <td>{{ login.established  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td>
+      <td>${{ login.comments }}</td>
+      <td>
+        <div class="button-group">
+          <a ng-href="/#/login/{{ login._id }}/edit" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></a>
+          <a ng-href="/#/login/{{ login._id }}/delete" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span></a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

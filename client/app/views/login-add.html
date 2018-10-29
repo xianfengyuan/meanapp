@@ -1,0 +1,24 @@
+<form role="form">
+  <div class="form-group">
+    <label for="username" class="control-label">Login username</label>
+    <input type="text" ng-model="login.username" class="form-control" id="username" placeholder="Enter the login username"/>
+  </div>
+  <div class="form-group">
+    <label for="password" class="control-label">Login password</label>
+    <input type="text" ng-model="login.password" class="form-control" id="password" placeholder="Enter the login password"/>
+  </div>
+  <div class="form-group">
+    <label for="established" class="control-label">Login established date (eg. 2018-09-02t14:52)</label>
+    <input class="form-control"
+       ng-model="login.established"
+       ng-model-options="{ updateOn: 'blur' }"
+       id="established"
+       placeholder="Enter the date you placed order..."
+       moment-picker="login.established"/>
+  </div>
+  <div class="form-group">
+    <label for="comments" class="control-label">Comments for the login</label>
+    <input type="text" ng-model="login.comments" class="form-control" id="comments" placeholder="Enter comments for the login"/>
+  </div>
+  <input type="submit" class="btn btn-primary" ng-click="saveLogin()" value="Save"/>
+</form>
