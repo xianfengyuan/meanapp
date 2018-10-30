@@ -13,9 +13,9 @@
     <th ng-click="sort('username')">username
       <span class="glyphicon sort-icon" ng-show="sortKey==='username'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
     </th>
-    <th ng-click="sort('password')">password
+    <!-- <th ng-click="sort('password')">password
       <span class="glyphicon sort-icon" ng-show="sortKey==='password'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-    </th>
+    </th> -->
     <th ng-click="sort('established')">established
       <span class="glyphicon sort-icon" ng-show="sortKey==='established'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
     </th>
@@ -28,7 +28,7 @@
     <tr ng-show="totalLogins <= 0"><td colspan="5" style="text-align:center;">Loading new data!!</td></tr>
     <tr dir-paginate="login in logins | itemsPerPage: loginsPerPage | orderBy : sortKey : reverse | filter: searchFilter"  total-items="totalLogins" current-page="pagination.current">
       <td><a ng-href="/#/login/{{ login._id }}">{{ login.username }}</a></td>
-      <td>{{ login.password }}</td>
+      <!-- <td>{{ login.password }}</td> -->
       <td>{{ login.established  | utcToLocal:'yyyy-MM-dd - hh.mm a' }}</td>
       <td>{{ login.comments }}</td>
       <td>
