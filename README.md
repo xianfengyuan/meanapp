@@ -5,9 +5,9 @@ M.E.A.N web application.
 
 ruby-compass package is needed for scss to work
 
-server:
+client:
 
 grunt serve --host=<DOMAIN> --port=<PORT>
 
-client:
+server:
 LISTEN_PORT=<PORT> node ./index.js
