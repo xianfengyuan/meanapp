@@ -24,35 +24,35 @@ angular
       duration: 250
     });
   }])
-  .config(['$authProvider', 'config', function ($authProvider, config) {
-    $authProvider.github({
-      clientId: config.GITHUB_CLIENT_ID,
-      redirectUri: config.GITHUB_REDIRECT_URI,
-      url: config.GITHUB_ACCESS_TOKEN_REQUEST_URL
-    });
-    $authProvider.httpInterceptor = true;
-  }])
+  // .config(['$authProvider', 'config', function ($authProvider, config) {
+  //   $authProvider.github({
+  //     clientId: config.GITHUB_CLIENT_ID,
+  //     redirectUri: config.GITHUB_REDIRECT_URI,
+  //     url: config.GITHUB_ACCESS_TOKEN_REQUEST_URL
+  //   });
+  //   $authProvider.httpInterceptor = true;
+  // }])
   .config(function (momentPickerProvider) {
     momentPickerProvider.options({
       minutesStep: 1
     });
   })
-  .config(function ($routeProvider, $authProvider, config, RestangularProvider) {
-    var requireAuthentication = function ($location, $auth, AuthenticationService) {
-      if ($auth.isAuthenticated()) {
-        return AuthenticationService.login()
-      } else {
-        return $location.path('/login');
-      }
-    };
-
-    $routeProvider.accessWhen = function(path, route){
-      route.resolve || (route.resolve = {
-        currentUser: function(currentUser){ return currentUser.fetch() },
-        requireAuthentication: requireAuthentication
-      });
-      return $routeProvider.when(path, route);
-    };
+  .config(function ($routeProvider, config, RestangularProvider) {
+    // var requireAuthentication = function ($location, $auth, AuthenticationService) {
+    //   if ($auth.isAuthenticated()) {
+    //     return AuthenticationService.login()
+    //   } else {
+    //     return $location.path('/login');
+    //   }
+    // };
+    //
+    // $routeProvider.when = function(path, route){
+    //   route.resolve || (route.resolve = {
+    //     currentUser: function(currentUser){ return currentUser.fetch() },
+    //     requireAuthentication: requireAuthentication
+    //   });
+    //   return $routeProvider.when(path, route);
+    // };
     // Set the base URL for Restangular.
     RestangularProvider.setBaseUrl(config.SERVER_URL);
 
@@ -63,67 +63,67 @@ angular
       .when('/logout', {
         templateUrl: 'views/logout.html'
       })
-      .accessWhen('/', {
+      .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .accessWhen('/logins', {
+      .when('/logins', {
         templateUrl: 'views/logins.html',
         controller: 'LoginsCtrl'
       })
-      .accessWhen('/create/login', {
+      .when('/create/login', {
         templateUrl: 'views/login-add.html',
         controller: 'LoginAddCtrl'
       })
-      .accessWhen('/login/:id', {
+      .when('/login/:id', {
         templateUrl: 'views/login-view.html',
         controller: 'LoginViewCtrl'
       })
-      .accessWhen('/login/:id/edit', {
+      .when('/login/:id/edit', {
         templateUrl: 'views/login-edit.html',
         controller: 'LoginEditCtrl'
       })
-      .accessWhen('/login/:id/delete', {
+      .when('/login/:id/delete', {
         templateUrl: 'views/login-delete.html',
         controller: 'LoginDeleteCtrl'
       })
-      .accessWhen('/movies', {
+      .when('/movies', {
         templateUrl: 'views/movies.html',
         controller: 'MoviesCtrl'
       })
-      .accessWhen('/create/movie', {
+      .when('/create/movie', {
         templateUrl: 'views/movie-add.html',
         controller: 'MovieAddCtrl'
       })
-      .accessWhen('/movie/:id', {
+      .when('/movie/:id', {
         templateUrl: 'views/movie-view.html',
         controller: 'MovieViewCtrl'
       })
-      .accessWhen('/movie/:id/edit', {
+      .when('/movie/:id/edit', {
         templateUrl: 'views/movie-edit.html',
         controller: 'MovieEditCtrl'
       })
-      .accessWhen('/movie/:id/delete', {
+      .when('/movie/:id/delete', {
         templateUrl: 'views/movie-delete.html',
         controller: 'MovieDeleteCtrl'
       })
-      .accessWhen('/receipts', {
+      .when('/receipts', {
         templateUrl: 'views/receipts.html',
         controller: 'ReceiptsCtrl'
       })
-      .accessWhen('/create/receipt', {
+      .when('/create/receipt', {
         templateUrl: 'views/receipt-add.html',
         controller: 'ReceiptAddCtrl'
       })
-      .accessWhen('/receipt/:id', {
+      .when('/receipt/:id', {
         templateUrl: 'views/receipt-view.html',
         controller: 'ReceiptViewCtrl'
       })
-      .accessWhen('/receipt/:id/edit', {
+      .when('/receipt/:id/edit', {
         templateUrl: 'views/receipt-edit.html',
         controller: 'ReceiptEditCtrl'
       })
-      .accessWhen('/receipt/:id/delete', {
+      .when('/receipt/:id/delete', {
         templateUrl: 'views/receipt-delete.html',
         controller: 'ReceiptDeleteCtrl'
       })
