@@ -15,7 +15,8 @@ angular
     'angularUtils.directives.dirPagination',
     'moment-picker',
     'ngNotify',
-    'satellizer'
+    'satellizer',
+    'ngD3tree'
   ])
   .run(['ngNotify', function(ngNotify) {
     ngNotify.config({
@@ -66,6 +67,10 @@ angular
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
+      })
+      .when('/tree', {
+        templateUrl: 'views/d3tree.html',
+        controller: 'treeCtrl'
       })
       .when('/logins', {
         templateUrl: 'views/logins.html',
