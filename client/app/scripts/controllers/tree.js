@@ -12,19 +12,19 @@ angular.module('clientApp')
 
   var jsons = [];
 
-  $http.get('https://rawgit.com/komushi/ng-d3tree/master/examples/data/data1.json')
-       .success(function(res){
-          jsons.push(res);
+  $http.get('/assets/data1.json')
+       .then(function(res){
+          jsons.push(res.data);
         });
 
-  $http.get('https://rawgit.com/komushi/ng-d3tree/master/examples/data/data2.json')
-       .success(function(res){
-          jsons.push(res);
+  $http.get('/asset/data2.json')
+       .then(function(res){
+          jsons.push(res.data);
         });
 
-  $interval(function(){
+  // $interval(function(){
     var idx = Math.floor(Math.random() * 2);
     $scope.d3json = jsons[idx];
-  }, 1000, 1000);
+  // }, 1000, 1000);
 
 });
