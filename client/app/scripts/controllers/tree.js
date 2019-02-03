@@ -17,14 +17,14 @@ angular.module('clientApp')
           jsons.push(res.data);
         });
 
-  $http.get('/asset/data2.json')
+  $http.get('/assets/data2.json')
        .then(function(res){
           jsons.push(res.data);
         });
 
-  // $interval(function(){
+  $interval(function(){
     var idx = Math.floor(Math.random() * 2);
     $scope.d3json = jsons[idx];
-  // }, 1000, 1000);
+  }, 1000, 1000);
 
 });
