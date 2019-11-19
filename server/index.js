@@ -80,63 +80,67 @@ function revokeToken(token, next) {
  |--------------------------------------------------------------------------
 */
 
-app.post('/auth/github', function(req, res) {
-
-  var accessTokenUrl = 'https://github.com/login/oauth/access_token';
+app.post('/auth/google', function(req, res) {
+  var accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
+  var apiUrl = 'https://people.googleapis.com/v1/people/me';
 
   var params = {
+    client_id: req.body.clientId,
+    redirect_uri: req.body.redirectUri,
     code: req.body.code,
-    client_id: process.env.GITHUB_CLIENT_ID,
-    client_secret: process.env.GITHUB_CLIENT_SECRET,
-    redirect_uri: req.body.redirectUri
+    grant_type: 'authorization_code',
+    client_secret: process.env.GOOGLE_CLIENT_SECRET
   };
 
     // Exchange authorization code for access token.
   request.post({ url: accessTokenUrl, headers: {'Content-Type': 'application/json'}, qs: params }, function(err, response, token) {
-    // console.log('====================');
     // console.log(JSON.stringify(params));
     if(err){
-      return res.status(400).send({ message: 'post error, User not found in github: ' + JSON.stringify(err) + accessTokenUrl + JSON.stringify(params) });
+      return res.status(400).send({ message: 'post error, User not found in google: ' + JSON.stringify(err) + accessTokenUrl + JSON.stringify(params) });
     }
 
-     var access_token = qs.parse(token).access_token;
-     var github_client = github.client(access_token);
+     var access_token = JSON.parse(token).access_token;
+     var headers = { Authorization: 'Bearer ' + access_token };
+     var params = { personFields: 'emailAddresses' };
 
          // Retrieve profile information about the current user.
-     github_client.me().info(function(err, profile){
-
-       if(err){
-         return res.status(400).send(token);
+     request.get({url: apiUrl, headers: headers, qs: params, json: true}, function(err, response, profile) {
+       if (err) {
+         return res.status(400).send({message: 'get error, profile not found: ' + JSON.stringify(err) + apiUrl + JSON.stringify(headers)});
        }
 
-       var github_id = profile['id'];
-       var github_login = profile['login'];
-       var userUrl = 'http://localhost:' + process.env.LISTEN_PORT + '/user?id__regex=/^' + github_login + '/i';
-       request(userUrl, { json: true }, function(err, response, body) {
-         console.log('check local DB: ' + JSON.stringify(body));
-         if (err || !err && response.statusCode > 200 && response.statusCode < 300) {
-           return revokeToken(access_token, function(err, response, body) {
-             if (err) {
-               return res.status(400).send({ message: 'check user: revoke user failed: ' + JSON.stringify(access_token) });
-             }
-             return res.status(400).send({ message: 'check user: user not found in local DB: ' + JSON.stringify(access_token) });
-           });
-         }
+       if (profile.error) {
+        return res.status(500).send({message: profile.error.message});
+       }
 
-         // found user in local DB
-         var user = { _id: github_id, oauth_token: access_token }
-         db.users.find({ _id: github_id  }, function (err, docs) {
-           // The user doesn't have an account already
-           if(_.isEmpty(docs)){
-             // Create the user
-             db.users.insert(user);
-           }
-           // Update the oauth2 token
-           else{
-             db.users.update({ _id: github_id }, { $set: { oauth_token: access_token } } )
-           }
-         });
-         res.send({token: access_token});
+      var github_id = profile.emailAddresses[0].metadata.source.id;
+      var github_login = profile.emailAddresses[0].value.split('@')[0];
+      var userUrl = 'http://localhost:' + process.env.LISTEN_PORT + '/user?id__regex=/^' + github_login + '/i';
+      request(userUrl, { json: true }, function(err, response, body) {
+        console.log('check local DB: ' + JSON.stringify(body));
+        if (err || !err && response.statusCode > 204 && response.statusCode < 300) {
+          return revokeToken(access_token, function(err, response, body) {
+            if (err) {
+              return res.status(400).send({ message: 'check user: revoke user failed: ' + JSON.stringify(access_token) });
+            }
+            return res.status(400).send({ message: 'check user: user not found in local DB: ' + JSON.stringify(access_token) });
+          });
+        }
+
+        // found user in local DB
+        var user = { _id: github_id, oauth_token: access_token }
+        db.users.find({ _id: github_id  }, function (err, docs) {
+          // The user doesn't have an account already
+          if(_.isEmpty(docs)){
+            // Create the user
+            db.users.insert(user);
+          }
+          // Update the oauth2 token
+          else{
+            db.users.update({ _id: github_id }, { $set: { oauth_token: access_token } } )
+          }
+        });
+        res.send({token: access_token});
       }); //request check if user is legit
     }); //github auth
   }); // get auth token

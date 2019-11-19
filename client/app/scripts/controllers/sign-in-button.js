@@ -9,8 +9,8 @@
  */
 angular.module('clientApp')
   .controller('SignInButtonCtrl', function($scope, $auth, $location, ngNotify){
-    $scope.authenticate = function() {
-      $auth.authenticate('github')
+    $scope.authenticate = function(provider) {
+      $auth.authenticate(provider)
       .then(function(response) {
         $location.path('/');
       })
