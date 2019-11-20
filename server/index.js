@@ -118,7 +118,7 @@ app.post('/auth/google', function(req, res) {
       var userUrl = 'http://localhost:' + process.env.LISTEN_PORT + '/user?id__regex=/^' + github_login + '/i';
       request(userUrl, { json: true }, function(err, response, body) {
         console.log('check local DB: ' + JSON.stringify(body));
-        if (err || !err && response.statusCode > 204 && response.statusCode < 300) {
+        if (err || !err && response.statusCode > 200 && response.statusCode < 300) {
           return revokeToken(access_token, function(err, response, body) {
             if (err) {
               return res.status(400).send({ message: 'check user: revoke user failed: ' + JSON.stringify(access_token) });
