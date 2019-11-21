@@ -86,7 +86,7 @@ app.post('/auth/github', function(req, res) {
 
   var params = {
     code: req.body.code,
-    client_id: process.env.GITHUB_CLIENT_ID,
+    client_id: req.body.clientId,
     client_secret: process.env.GITHUB_CLIENT_SECRET,
     redirect_uri: req.body.redirectUri
   };
